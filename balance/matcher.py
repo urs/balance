@@ -2,11 +2,11 @@ import re
 import matcher
 from functools import reduce
 
-def match_rule(rule, day):
+def match_conditions(conditions, day):
     return reduce( 
         (lambda x,y: x and y), [
             _condition_matches(matcher_type, condition, day)
-            for matcher_type, condition in rule.items()
+            for matcher_type, condition in conditions.items()
         ]
     )
 
