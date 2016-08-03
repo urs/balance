@@ -7,44 +7,40 @@ from balance import forecaster
 # daily balance from start date until end date
 
 def test_no_balance_change():
-    start_balance = 1000
     start_date    = "2000-01-01"
     end_date      = "2000-01-31"
     rules = []
 
-    expected = 1000
-    actual = forecaster.forecast_balance(start_balance, start_date, end_date, rules)
+    expected = 0
+    actual = forecaster.forecast_diff(start_date, end_date, rules)
     assert_equal(actual, expected)
 
 
 def test_simple_balance_addition():
-    start_balance = 1000
     start_date    = "2000-01-01"
     end_date      = "2000-01-31"
     rules = [
         { "what": "salary", "delta": 3000, "when": { "regex": "\d+-\d+-01" } }
     ]
 
-    expected = 4000
-    actual = forecaster.forecast_balance(start_balance, start_date, end_date, rules)
+    expected = 3000
+    actual = forecaster.forecast_diff(start_date, end_date, rules)
     assert_equal(actual, expected)
 
 
 def test_simple_balance_reduction():
-    start_balance = 1000
     start_date    = "2000-01-01"
     end_date      = "2000-01-31"
     rules = [
         { "what": "rent", "delta": -500, "when": { "regex": "\d+-\d+-01" } }
     ]
 
-    expected = 500
-    actual = forecaster.forecast_balance(start_balance, start_date, end_date, rules)
+    expected = -500
+    actual = forecaster.forecast_diff(start_date, end_date, rules)
     assert_equal(actual, expected)
 
 
 def test_multiple_rules():
-    start_balance = 1000
     start_date    = "2000-01-01"
     end_date      = "2000-01-31"
     rules = [
@@ -53,13 +49,12 @@ def test_multiple_rules():
         { "what": "something", "delta": -100, "when": { "regex": "\d+-\d+-03" } }
     ]
 
-    expected = 3400
-    actual = forecaster.forecast_balance(start_balance, start_date, end_date, rules)
+    expected = 2400
+    actual = forecaster.forecast_diff(start_date, end_date, rules)
     assert_equal(actual, expected)
 
 
 def test_multiple_rules_same_date():
-    start_balance = 1000
     start_date    = "2000-01-01"
     end_date      = "2000-01-31"
     rules = [
@@ -68,25 +63,24 @@ def test_multiple_rules_same_date():
         { "what": "something", "delta": -100, "when": { "regex": "\d+-\d+-01" } }
     ]
 
-    expected = 3400
-    actual = forecaster.forecast_balance(start_balance, start_date, end_date, rules)
+    expected = 2400
+    actual = forecaster.forecast_diff(start_date, end_date, rules)
     assert_equal(actual, expected)
 
 
 def test_multiple_rule_applications():
-    start_balance = 1000
     start_date    = "2000-01-01"
     end_date      = "2000-12-31"
     rules = [
         { "what": "something", "delta": -100, "when": { "regex": "\d+-\d+-01" } }
     ]
 
-    expected = -200
-    actual = forecaster.forecast_balance(start_balance, start_date, end_date, rules)
+    expected = -1200
+    actual = forecaster.forecast_diff(start_date, end_date, rules)
     assert_equal(actual, expected)
 
 
-def test_forecast_development():
+def test_forecast_balance_trend():
     start_balance = 1000
     start_date    = "2016-01-01"
     end_date      = "2016-01-15"
@@ -115,7 +109,7 @@ def test_forecast_development():
         ("2016-01-14", 3100),
         ("2016-01-15", 3100)
     ]
-    actual = forecaster.forecast_balance_dev(start_balance, start_date, end_date, rules)
+    actual = forecaster.forecast_balance_trend(start_balance, start_date, end_date, rules)
     assert_equal(actual, expected)
 
 

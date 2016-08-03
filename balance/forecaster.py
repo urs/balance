@@ -3,28 +3,17 @@ from balance import matcher
 from functools import reduce
 import re
 
-def forecast_balance_dev(balance, start, end, rules):
 
-    deltas = []
-    for day in _daterange(start, end):
-
-        day_delta = _calculate_delta_for_day(day, rules)
-        result_tuple = (_to_date(day), day_delta)
-        deltas.append(result_tuple)
-
-
-    print deltas
+def forecast_balance_trend(balance, start, end, rules):
 
     balances = []
-
-    for day, delta in deltas:
+    for day in _daterange(start, end):
+        delta = _calculate_delta_for_day(day, rules)
         balance += delta
-        balances.append((day, balance))
-
-
-    print balances
+        balances.append((_to_date(day), balance))
 
     return balances 
+
 
 def _calculate_delta_for_day(day, rules):
     day_delta = 0;
@@ -33,7 +22,8 @@ def _calculate_delta_for_day(day, rules):
             day_delta += rule["delta"]
     return day_delta
 
-def forecast_balance(balance, start, end, rules):
+
+def forecast_diff(start, end, rules):
 
     deltas = [ 
         rule["delta"] 
@@ -41,8 +31,7 @@ def forecast_balance(balance, start, end, rules):
         for rule in rules 
         if matcher.match_conditions(rule["when"], day)
     ]
-    delta = reduce(lambda x,y: x+y, deltas) if rules else 0
-    return balance + delta
+    return reduce(lambda x,y: x+y, deltas) if rules else 0
 
 
 def _daterange(start, end):
