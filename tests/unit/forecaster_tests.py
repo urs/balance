@@ -85,15 +85,15 @@ def test_forecast_balance_trend():
     start_date    = "2016-01-01"
     end_date      = "2016-01-15"
     rules = [
-        { "what": "salary1", "delta": 2000, "when": { "regex": "\d+-\d+-02" } },
-        { "what": "salary2", "delta": 1000, "when": { "regex": "\d+-\d+-02" } },
+        { "what": "salary1", "delta": 2000, "when": { "regex": "\d+-\d+-01" } },
+        { "what": "salary2", "delta": 1000, "when": { "regex": "\d+-\d+-01" } },
         { "what": "rent", "delta": -500, "when":  { "regex": "\d+-\d+-03" } },
         { "what": "sth once", "delta": -100, "when": { "regex": "2016-01-10" } },
         { "what": "sth weekly", "delta": -150, "when": { "weekday": 1 } }
     ]
 
     expected = [
-        ("2016-01-01", 1000),
+        ("2016-01-01", 4000),
         ("2016-01-02", 4000),
         ("2016-01-03", 3500),
         ("2016-01-04", 3500),
