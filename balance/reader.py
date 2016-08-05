@@ -1,10 +1,20 @@
+from os.path import join, dirname, realpath
 import csv
 
-def read_transactions(filename, mappings):
+def read_transactions(filename, mappings = {}):
     lines = _read_file(filename)
     lines.pop(0)
 
+    if not mappings:
+        mappings = _load_default_mappings()
+
     return [ _map(item, mappings) for item in _parse_csv(lines) ]
+
+
+def _load_default_mappings():
+    filename = join(dirname(realpath(__file__)), 'mappings.json')
+    with open(filename) as f:
+        return json.loads(f.read())
 
 
 def _read_file(filename):
@@ -22,3 +32,4 @@ def _map(line, mappings):
         fieldname: line[index]
         for fieldname, index in mappings
     }
+
